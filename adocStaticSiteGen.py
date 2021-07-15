@@ -1,7 +1,7 @@
 #! /usr/bin/env python3
 #takes directory, converts all .adoc files to html files, copying the resulting html files to an identical directory strucuture, and copies over all non .adoc files unchanged. Optionally outputs as a tar.gz file.
 
-import subprocess, sys, argparse, logging, tempfile
+import subprocess, sys, argparse, logging, tempfile, tarfile
 from pathlib import Path
 
 #logging.basicConfig(format='%(asctime)s:%(message)s', level=logging.INFO)
@@ -40,4 +40,22 @@ def parse_arguments():
         raise FileExistsError('output file cannot have the same path as the input file!')
 
     return args.inputDir, outFile, compress
+
+class TmpDir:
+    def __init__(self, srcDir):
+        logging.debug('making tmp file')
+        self.tmpDir = tempfile.TemporaryDirectory()
+        self.ignorePattern = shutil.ignore_patterns('*.adoc')
+        shutil.copytree(srcDir, self.tmpDir, ignore = shutil.ignore_patterns('*.adoc'), symlinks=False)
+
+    def copy_self_to(self, destDir):
+        shutil.copytree(self.tmpDir, destDir, symlinks=False)
+
+    def compress_and_copy_self_to(self, destPath):
+        tarFile=tarfile.open(name=Path(destPath).resolve, mode='x:gz', dereference=True)
+        tarFile = shutil.make_archive(Path(destPath).resolve(), 'gztar', self.tmpDir)
+
+    def cleanup(self):
+        tmpDir.cleanup()
+
 parse_arguments()
