@@ -45,14 +45,13 @@ class TmpDir:
     def __init__(self, srcDir):
         logging.debug('making tmp file')
         self.tmpDir = tempfile.TemporaryDirectory()
-        self.ignorePattern = shutil.ignore_patterns('*.adoc')
-        shutil.copytree(srcDir, self.tmpDir, ignore = shutil.ignore_patterns('*.adoc'), symlinks=False)
+        self.ignorePattern = shutil.ignore_patterns('*.adoc', '.git', '.gitignore')
+        shutil.copytree(srcDir, self.tmpDir, ignore = self.ignorePattern, symlinks=False)
 
     def copy_self_to(self, destDir):
         shutil.copytree(self.tmpDir, destDir, symlinks=False)
 
     def compress_and_copy_self_to(self, destPath):
-        tarFile=tarfile.open(name=Path(destPath).resolve, mode='x:gz', dereference=True)
         tarFile = shutil.make_archive(Path(destPath).resolve(), 'gztar', self.tmpDir)
 
     def cleanup(self):
