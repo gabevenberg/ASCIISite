@@ -1,0 +1,113 @@
+= test page for an adoc static site generator.
+Gabe Venberg
+:imagesdir: ./images
+:giturl: git.venberg.xyz/Gabe/adocStaticSiteGen
+:toc:
+
+
+IMPORTANT: Test the links in this page!
+
+== inline formatting tests
+
+*bold test*
+
+_italics test_
+
+'monospace test'
+
+'*monospace bold test*'
+
+'_monospace italic test_'
+
+_*italic bold test*_
+
+'*_all three test_*'
+
+\*escaped bold test*
+
++++<u>underline test using html passthrough test</u>+++
+
++*escaped bold test with plus*+
+
+-> => <- <=
+
+== list tests
+
+.unordered list test
+* Lorum
+* ipsum
+** dolor
+** sit
+*** amet
+** consectetur
+
+.ordered list test.
+. Lorum
+. ipsum
+.. dolor
+.. sit
+... amet
+.. consectetur
+
+.reversed ordered list test.
+[%reversed]
+. Lorum
+. ipsum
+.. dolor
+.. sit
+... amet
+.. consectetur
+
+.mixed list
+. Lorum
+. ipsum
+** dolor
+** sit
+*** amet
+. consectetur
+** adipiscing
+** elit
+
+.description list test
+[horizontal]
+test:: to make sure software works correctly
+git:: a gift from the machine spirits
+printers:: the greatest evil to ever befall IT.
+
+==link tests
+
+link:{giturl}[gittea absolute link]
+
+TODO: relative links
+TODO: xrefs
+TODO: includes
+
+Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+Phasellus mi tellus, suscipit in dolor nec, faucibus aliquam nulla.
+Mauris gravida, felis commodo molestie tincidunt, sem erat varius lorem, nec lobortis eros sem ut augue.
+Donec suscipit tristique imperdiet.
+Sed maximus est ultrices urna imperdiet, vitae facilisis eros posuere.
+Quisque a mollis mauris.
+Pellentesque fermentum, libero sed sollicitudin interdum, dolor nunc euismod purus, et laoreet tellus augue vitae turpis.
+Pellentesque condimentum elit quis semper tincidunt.
+Nullam consectetur euismod accumsan.
+In dictum nibh ut iaculis euismod.
+Phasellus ut nibh non ipsum volutpat cursus.
+Sed eleifend, enim vitae ultrices auctor, dolor ipsum molestie dui, id dignissim massa neque a mauris.
+
+[#test-pattern]
+.Technical Difficulties
+[link={giturl}]
+image::test_patern.jpg[Stand By]
+
+Fusce maximus nec magna eu ultricies.
+Fusce quis tellus vitae arcu facilisis lobortis.
+Donec id erat at enim porta placerat in vitae sapien.
+Duis justo arcu, hendrerit nec nulla eu, dictum dapibus ipsum.
+Sed fermentum id elit eget fringilla.
+Suspendisse volutpat imperdiet justo, ut efficitur odio maximus et.
+Nunc interdum sollicitudin eros sit amet convallis.
+Praesent volutpat tempus metus id tincidunt.
+Proin aliquet justo a fermentum consectetur.
+Nunc scelerisque, nisi id scelerisque dictum, nibh lectus ultrices nunc, quis ultricies erat velit sit amet urna.
+Maecenas orci felis, volutpat at bibendum ut, mattis eu justo.
