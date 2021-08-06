@@ -1,0 +1,17 @@
+= relatively linked doc
+Gabe Venberg
+:imagesdir: ../../images/
+:reproducible:
+:giturl: git.venberg.xyz/Gabe/adocStaticSiteGen
+
+[#test-pattern]
+.Technical Difficulties
+[link={giturl}]
+image::test_patern.jpg[Stand By]
+
+https://git.venberg.xyz/Gabe/adocStaticSiteGen
+
+.A mechanical marvel
+video::IvUU8joBb1Q[youtube]
+
+<<../../landing_page.adoc#_link_tests,back to where you came!>>
