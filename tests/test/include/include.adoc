@@ -1,0 +1,65 @@
+== included section
+
+Fusce maximus nec magna eu ultricies.
+Fusce quis tellus vitae arcu facilisis lobortis.
+Donec id erat at enim porta placerat in vitae sapien.
+Duis justo arcu, hendrerit nec nulla eu, dictum dapibus ipsum.
+Sed fermentum id elit eget fringilla.
+Suspendisse volutpat imperdiet justo, ut efficitur odio maximus et.
+Nunc interdum sollicitudin eros sit amet convallis.
+Praesent volutpat tempus metus id tincidunt.
+Proin aliquet justo a fermentum consectetur.
+Nunc scelerisque, nisi id scelerisque dictum, nibh lectus ultrices nunc, quis ultricies erat velit sit amet urna.
+Maecenas orci felis, volutpat at bibendum ut, mattis eu justo.
+
+=== blocks
+
+.listing block
+----
+example of _listing block_
+with verbatim line break
+----
+
+.example block
+====
+example block
+with line break
+====
+
+.literal block
+....
+_literal_ block
+with line break
+....
+
+.pass block
+++++
+pass block
+with <u>underlined text</u>
+++++
+
+.quote block
+____
+quote block
+with line break
+____
+
+.sidebar block
+****
+sidebar block
+with line break
+****
+
+[NOTE]
+====
+This is an example of an admonition block.
+
+Unlike an admonition paragraph, it may contain any AsciiDoc content.
+The style can be any one of the admonition labels:
+
+* NOTE
+* TIP
+* WARNING
+* CAUTION
+* IMPORTANT
+====
