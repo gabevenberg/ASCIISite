@@ -1,0 +1,134 @@
+= test page for an adoc static site generator.
+Gabe Venberg
+:imagesdir: images
+:docdate: 2021-08-06
+:reproducible:
+:giturl: https://git.venberg.xyz/Gabe/adocStaticSiteGen
+:toc:
+:icons: font
+:includedir: include/
+
+
+IMPORTANT: Test the links in this page!
+
+Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+Phasellus mi tellus, suscipit in dolor nec, faucibus aliquam nulla.
+Mauris gravida, felis commodo molestie tincidunt, sem erat varius lorem, nec lobortis eros sem ut augue.
+Donec suscipit tristique imperdiet.
+Sed maximus est ultrices urna imperdiet, vitae facilisis eros posuere.
+Quisque a mollis mauris.
+Pellentesque fermentum, libero sed sollicitudin interdum, dolor nunc euismod purus, et laoreet tellus augue vitae turpis.
+Pellentesque condimentum elit quis semper tincidunt.
+Nullam consectetur euismod accumsan.
+In dictum nibh ut iaculis euismod.
+Phasellus ut nibh non ipsum volutpat cursus.
+Sed eleifend, enim vitae ultrices auctor, dolor ipsum molestie dui, id dignissim massa neque a mauris.
+
+== inline formatting tests
+
+*bold test*
+
+_italics test_
+
+'monospace test'
+
+'*monospace bold test*'
+
+'_monospace italic test_'
+
+_*italic bold test*_
+
+'*_all three test_*'
+
+\*escaped bold test*
+
++++<u>underline test using html passthrough test</u>+++
+
++*escaped bold test with plus*+
+
+-> => <- <=
+
+== list tests
+
+.unordered list test
+* Lorum
+* ipsum
+** dolor
+** sit
+*** amet
+** consectetur
+
+.ordered list test.
+. Lorum
+. ipsum
+.. dolor
+.. sit
+... amet
+.. consectetur
+
+.reversed ordered list test.
+[%reversed]
+. Lorum
+. ipsum
+.. dolor
+.. sit
+... amet
+.. consectetur
+
+.mixed list
+. Lorum
+. ipsum
+** dolor
+** sit
+*** amet
+. consectetur
+** adipiscing
+** elit
+
+.description list test
+[horizontal]
+test:: to make sure software works correctly
+git:: a gift from the machine spirits
+printers:: the greatest evil to ever befall IT.
+
+== link tests
+
+Lets go back to the <<list tests>> or to the <<tables test,tables>>
+
+link:{giturl}[gittea absolute link]
+
+.Technical Difficulties
+[link={giturl}]
+image::test_pattern.svg[Stand By]
+
+link:dir/subdir/linked.html[link!]
+
+<<dir/subdir/linked.adoc#,xref!>>
+
+.Source code test
+[source, python]
+----
+include::dir/collatz.py[]
+----
+
+== tables test
+
+|===
+|Name |Group |Description
+
+|Firefox
+|Web Browser
+a|Mozilla Firefox is an open-source web browser.
+It's designed for:
+
+* standards compliance,
+* performance and
+* portability.
+
+|Ruby
+|Programming Language
+|A programmer's best friend.
+
+|===
+
+include::{includedir}/include.adoc[]
