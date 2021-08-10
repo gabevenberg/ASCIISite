@@ -1,7 +1,7 @@
 #! /usr/bin/env python3
 #takes directory, converts all .adoc files to html files, copying the resulting html files to an identical directory strucuture, and copies over all non .adoc files unchanged. Optionally outputs as a tar.gz file.
 
-import subprocess, sys, argparse, logging, tempfile, tarfile
+import subprocess, sys, argparse, logging, tempfile, shutil
 from pathlib import Path
 
 #logging.basicConfig(format='%(asctime)s:%(message)s', level=logging.INFO)
@@ -45,16 +45,25 @@ class TmpDir:
     def __init__(self, srcDir):
         logging.debug('making tmp file')
         self.tmpDir = tempfile.TemporaryDirectory()
+        self.path = self.tmpDir.name+'/data/'
         self.ignorePattern = shutil.ignore_patterns('*.adoc', '.git', '.gitignore')
-        shutil.copytree(srcDir, self.tmpDir, ignore = self.ignorePattern, symlinks=False)
+        shutil.copytree(srcDir, self.path, ignore = self.ignorePattern, symlinks=False)
 
     def copy_self_to(self, destDir):
-        shutil.copytree(self.tmpDir, destDir, symlinks=False)
+        shutil.copytree(self.path, destDir, symlinks=False)
 
     def compress_and_copy_self_to(self, destPath):
-        tarFile = shutil.make_archive(Path(destPath).resolve(), 'gztar', self.tmpDir)
+        #shutil.make_archive wants destPath to be without file extentions for some godforsaken reason.
+        destPath = Path(destPath.with_name(destPath.name.split('.')[0])).resolve()
+        logging.debug(f'outputting to {destPath}')
+        tarFile = shutil.make_archive(destPath, 'gztar', self.path)
 
     def cleanup(self):
-        tmpDir.cleanup()
+        self.tmpDir.cleanup()
 
-parse_arguments()
+inputDir, outFile, compress = parse_arguments()
+tmpdir = TmpDir(inputDir)
+print(tmpdir.path)
+breakpoint()
+tmpdir.compress_and_copy_self_to(outFile)
+tmpdir.cleanup()
