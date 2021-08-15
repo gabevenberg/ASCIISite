@@ -14,6 +14,7 @@ def parse_arguments():
     parser.add_argument('-z', '--compress', action='store_true', help='whether to compress the resulting directory to a tar.gz file. can be usefull for scripting to transfer the site to a remote server.')
     args=parser.parse_args()
 
+    #set compress flag
     if args.output != None and not args.compress:
         #detect based on whether outFile has a .tar.gz filename.
         if args.output.suffixes == ['.tar', '.gz']:
@@ -23,35 +24,40 @@ def parse_arguments():
     else:
         compress = args.compress
     
+    #If outfile was not set, set it.
     if args.output == None:
         outFile = args.inputDir.with_name(args.inputDir.name+'_compiled')
     else:
         outFile=args.output
 
+    #add .tar.gz if compress is set and the outfile does not already have it.
     if compress and outFile.suffixes != ['.tar', '.gz']:
-        logging.debug(f'outFile was {outFile}, corrected because compress flag is set.')
+        logging.info(f'outFile was {outFile}, corrected because compress flag is set.')
         outFile = outFile.with_suffix('.tar.gz')
+
+    if args.inputDir.resolve() == outFile.resolve():
+        raise FileExistsError('output file cannot have the same path as the input file!')
 
     logging.debug(f'inputing from {args.inputDir.resolve()}')
     logging.info(f'outputting to {outFile.resolve()}')
     logging.debug(f'compress is {compress}')
 
-    if args.inputDir.resolve() == outFile.resolve():
-        raise FileExistsError('output file cannot have the same path as the input file!')
-
     return args.inputDir, outFile, compress
 
+#Doing it in a tmpDir first, as some distrubutions put temp files on a ramdisk. this should speed up the operation sigificantly.
 class TmpDir:
     def __init__(self, srcDir):
-        logging.debug('making tmp file')
         self.tmpDir = tempfile.TemporaryDirectory()
+        logging.debug(f'making tmp file from {srcdir} at {tmpDir.name}')
         self.path = self.tmpDir.name+'/data/'
         self.ignorePattern = shutil.ignore_patterns('*.adoc', '.git', '.gitignore')
         shutil.copytree(srcDir, self.path, ignore = self.ignorePattern, symlinks=False)
 
+    #copy out from tmpDir (which may be in RAM, depending on distrubution) to disk
     def copy_self_to(self, destDir):
         shutil.copytree(self.path, destDir, symlinks=False)
 
+    #copy out from tmpDir (which may be in RAM, depending on distrubution) to a compressed file on disk
     def compress_and_copy_self_to(self, destPath):
         #shutil.make_archive wants destPath to be without file extentions for some godforsaken reason.
         destPath = Path(destPath.with_name(destPath.name.split('.')[0])).resolve()
@@ -65,5 +71,6 @@ inputDir, outFile, compress = parse_arguments()
 tmpdir = TmpDir(inputDir)
 print(tmpdir.path)
 breakpoint()
+tmpdir.copy_self_to(outFile)
 tmpdir.compress_and_copy_self_to(outFile)
 tmpdir.cleanup()
