@@ -1,7 +1,7 @@
 #! /usr/bin/env python3
 #takes directory, converts all .adoc files to html files, copying the resulting html files to an identical directory strucuture, and copies over all non .adoc files unchanged. Optionally outputs as a tar.gz file.
 
-import subprocess, sys, argparse, logging, tempfile, shutil
+import subprocess, sys, argparse, logging, tempfile, shutil, os
 from pathlib import Path
 
 #logging.basicConfig(format='%(asctime)s:%(message)s', level=logging.INFO)
@@ -48,7 +48,7 @@ def parse_arguments():
 class TmpDir:
     def __init__(self, srcDir):
         self.tmpDir = tempfile.TemporaryDirectory()
-        logging.debug(f'making tmp file from {srcdir} at {tmpDir.name}')
+        logging.debug(f'making tmp file from {srcDir} at {self.tmpDir.name}')
         self.path = self.tmpDir.name+'/data/'
         self.ignorePattern = shutil.ignore_patterns('*.adoc', '.git', '.gitignore')
         shutil.copytree(srcDir, self.path, ignore = self.ignorePattern, symlinks=False)
@@ -67,10 +67,17 @@ class TmpDir:
     def cleanup(self):
         self.tmpDir.cleanup()
 
+#pass an empty list to start this. It calls itself recursively
+def find_paths_to_convert(inputDir, pathList):
+    with os.scandir(inputDir) as it:
+        for path in it:
+            logging.debug(f'found {path.path}')
+            if path.is_dir():
+                logging.debug(f'{path.path} is directory, recursing')
+                find_paths_to_convert(path, pathList)
+
 inputDir, outFile, compress = parse_arguments()
-tmpdir = TmpDir(inputDir)
-print(tmpdir.path)
+tmpDir=TmpDir(inputDir)
 breakpoint()
-tmpdir.copy_self_to(outFile)
-tmpdir.compress_and_copy_self_to(outFile)
-tmpdir.cleanup()
+tmpDir.cleanup()
+find_paths_to_convert(inputDir, [])
