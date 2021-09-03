@@ -1,7 +1,7 @@
 #! /usr/bin/env python3
 #takes directory, converts all .adoc files to html files, copying the resulting html files to an identical directory strucuture, and copies over all non .adoc files unchanged. Optionally outputs as a tar.gz file.
 
-import subprocess, sys, argparse, logging, tempfile, shutil, os
+import subprocess, sys, argparse, logging, tempfile, shutil, os, re
 from pathlib import Path
 
 #logging.basicConfig(format='%(asctime)s:%(message)s', level=logging.INFO)
@@ -75,9 +75,14 @@ def find_paths_to_convert(inputDir, pathList):
             if path.is_dir():
                 logging.debug(f'{path.path} is directory, recursing')
                 find_paths_to_convert(path, pathList)
+            elif path.is_file() and re.match('^.*\.adoc$', path.name):
+                logging.debug(f'adding {path.name} to pathList')
+                pathList.append(Path(path.path))
+    return pathList
 
-inputDir, outFile, compress = parse_arguments()
-tmpDir=TmpDir(inputDir)
+inFile, outFile, compress = parse_arguments()
+os.chdir(inFile)
+tmpDir=TmpDir('./')
 breakpoint()
 tmpDir.cleanup()
-find_paths_to_convert(inputDir, [])
+print(find_paths_to_convert('./', []))
