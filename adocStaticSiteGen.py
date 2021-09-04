@@ -80,9 +80,21 @@ def find_paths_to_convert(inputDir, pathList):
                 pathList.append(Path(path.path))
     return pathList
 
+#simple wrapper around the asciidoctor cli.
+def convert_file(inDir, outDir, inFile):
+    logging.debug(f'converting {inFile} from directory {inDir} to directory {outDir}')
+    try:
+        subprocess.run(['asciidoctor', f'--base-dir={inDir}', f'--source-dir={inDir}', f'--destination-dir={outDir}', inFile], check=True)
+    except Exception as e:
+        logging.error(f'could not convert {inFile}!')
+        logging.error(f'stdErr was {e.stderr}')
+        logging.error(f'stdOut was {e.stdout}')
+
 inFile, outFile, compress = parse_arguments()
 os.chdir(inFile)
 tmpDir=TmpDir('./')
+pathsToConvert=find_paths_to_convert('./', [])
+for i in pathsToConvert:
+    convert_file('./', tmpDir.path, i)
 breakpoint()
 tmpDir.cleanup()
-print(find_paths_to_convert('./', []))
