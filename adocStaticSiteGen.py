@@ -55,13 +55,14 @@ class TmpDir:
 
     #copy out from tmpDir (which may be in RAM, depending on distrubution) to disk
     def copy_self_to(self, destDir):
+        logging.debug(f'outputting to {destPath}')
         shutil.copytree(self.path, destDir, symlinks=False)
 
     #copy out from tmpDir (which may be in RAM, depending on distrubution) to a compressed file on disk
     def compress_and_copy_self_to(self, destPath):
         #shutil.make_archive wants destPath to be without file extentions for some godforsaken reason.
         destPath = Path(destPath.with_name(destPath.name.split('.')[0])).resolve()
-        logging.debug(f'outputting to {destPath}')
+        logging.debug(f'compressing to {destPath}')
         tarFile = shutil.make_archive(destPath, 'gztar', self.path)
 
     def cleanup(self):
@@ -82,8 +83,10 @@ def find_paths_to_convert(inputDir, pathList):
 
 #simple wrapper around the asciidoctor cli.
 def convert_file(inDir, outDir, inFile):
+    logging.info(f'converting {Path(inFile).resolve()}')
     logging.debug(f'converting {inFile} from directory {inDir} to directory {outDir}')
     try:
+        #the destdir can be used instead of destfile in order to preserve the directory structure relative to the base dir. really useful.
         subprocess.run(['asciidoctor', f'--base-dir={inDir}', f'--source-dir={inDir}', f'--destination-dir={outDir}', inFile], check=True)
     except Exception as e:
         logging.error(f'could not convert {inFile}!')
