@@ -99,17 +99,18 @@ def convert_file(inDir, outDir, inFile):
         logging.error(f'stdErr was {e.stderr}')
         logging.error(f'stdOut was {e.stdout}')
 
-inFile, outFile, compress=parse_arguments()
-os.chdir(inFile)
-tmpDir=TmpDir('./')
-pathsToConvert=find_paths_to_convert('./', [])
+if __name__ == '__main__':
+    inFile, outFile, compress=parse_arguments()
+    os.chdir(inFile)
+    tmpDir=TmpDir('./')
+    pathsToConvert=find_paths_to_convert('./', [])
 
-for i in pathsToConvert:
-    convert_file('./', tmpDir.path, i)
+    for i in pathsToConvert:
+        convert_file('./', tmpDir.path, i)
 
-if compress:
-    tmpDir.compress_and_copy_self_to(outFile)
-else:
-    tmpDir.copy_self_to(outFile)
+    if compress:
+        tmpDir.compress_and_copy_self_to(outFile)
+    else:
+        tmpDir.copy_self_to(outFile)
 
-tmpDir.cleanup()
+    tmpDir.cleanup()
