@@ -26,7 +26,8 @@ def parse_arguments():
     
     #If outfile was not set, set it.
     if args.output == None:
-        outFile=args.inputDir.with_name(args.inputDir.name+'_compiled').resolve()
+        baseName=args.inputDir.with_name(args.inputDir.name+'_compiled').name
+        outFile=Path(os.getcwd()).joinpath(baseName)
     else:
         outFile=args.output.resovle()
 
