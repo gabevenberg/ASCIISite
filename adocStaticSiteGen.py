@@ -1,7 +1,7 @@
 #! /usr/bin/env python3
 #takes directory, converts all .adoc files to html files, copying the resulting html files to an identical directory strucuture, and copies over all non .adoc files unchanged. Optionally outputs as a tar.gz file.
 
-import subprocess, sys, argparse, logging, tempfile, shutil, os, re
+import subprocess, sys, argparse, logging, tempfile, shutil, os, glob
 from pathlib import Path
 
 logging.basicConfig(format='%(asctime)s:%(message)s', level=logging.INFO)
@@ -69,18 +69,9 @@ class TmpDir:
     def cleanup(self):
         self.tmpDir.cleanup()
 
-#pass an empty list to start this. It calls itself recursively
-def find_paths_to_convert(inputDir, pathList):
-    with os.scandir(inputDir) as it:
-        for path in it:
-            logging.debug(f'found {path.path}')
-            if path.is_dir():
-                logging.debug(f'{path.path} is directory, recursing')
-                find_paths_to_convert(path, pathList)
-            elif path.is_file() and re.match('^.*\.adoc$', path.name):
-                logging.debug(f'adding {path.name} to pathList')
-                pathList.append(Path(path.path))
-    return pathList
+#works on the current working directory
+def find_paths_to_convert(fileNameGlob):
+    return glob.glob(f'**/{fileNameGlob}', recursive=True)
 
 #simple wrapper around the asciidoctor cli.
 def convert_file(inDir, outDir, inFile):
@@ -104,7 +95,7 @@ if __name__ == '__main__':
     inFile, outFile, compress=parse_arguments()
     os.chdir(inFile)
     tmpDir=TmpDir('./')
-    pathsToConvert=find_paths_to_convert('./', [])
+    pathsToConvert=find_paths_to_convert('*.adoc')
 
     for i in pathsToConvert:
         convert_file('./', tmpDir.path, i)
