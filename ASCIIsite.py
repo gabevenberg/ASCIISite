@@ -29,7 +29,7 @@ def parse_arguments():
         baseName=args.inputDir.with_name(args.inputDir.name+'_compiled').name
         outFile=Path(os.getcwd()).joinpath(baseName)
     else:
-        outFile=args.output.resovle()
+        outFile=args.output.resolve()
 
     #add .tar.gz if compress is set and the outfile does not already have it.
     if compress and outFile.suffixes != ['.tar', '.gz']:

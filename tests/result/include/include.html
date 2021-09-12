@@ -5,8 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="generator" content="Asciidoctor 2.0.16">
-<meta name="author" content="Gabe Venberg">
-<title>relatively linked doc</title>
+<title>included section</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700">
 <style>
 /*! Asciidoctor default stylesheet | MIT License | https://asciidoctor.org */
@@ -440,33 +439,113 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </head>
 <body class="article">
 <div id="header">
-<h1>relatively linked doc</h1>
-<div class="details">
-<span id="author" class="author">Gabe Venberg</span><br>
-</div>
 </div>
 <div id="content">
-<div id="test-pattern" class="imageblock">
-<div class="content">
-<a class="image" href="git.venberg.xyz/Gabe/adocStaticSiteGen"><img src="../../images/test_patern.jpg" alt="Stand By"></a>
+<div class="sect1">
+<h2 id="_included_section">included section</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Fusce maximus nec magna eu ultricies.
+Fusce quis tellus vitae arcu facilisis lobortis.
+Donec id erat at enim porta placerat in vitae sapien.
+Duis justo arcu, hendrerit nec nulla eu, dictum dapibus ipsum.
+Sed fermentum id elit eget fringilla.
+Suspendisse volutpat imperdiet justo, ut efficitur odio maximus et.
+Nunc interdum sollicitudin eros sit amet convallis.
+Praesent volutpat tempus metus id tincidunt.
+Proin aliquet justo a fermentum consectetur.
+Nunc scelerisque, nisi id scelerisque dictum, nibh lectus ultrices nunc, quis ultricies erat velit sit amet urna.
+Maecenas orci felis, volutpat at bibendum ut, mattis eu justo.</p>
 </div>
-<div class="title">Figure 1. Technical Difficulties</div>
+<div class="sect2">
+<h3 id="_blocks">blocks</h3>
+<div class="listingblock">
+<div class="title">listing block</div>
+<div class="content">
+<pre>example of _listing block_
+with verbatim line break</pre>
+</div>
+</div>
+<div class="exampleblock">
+<div class="title">Example 1. example block</div>
+<div class="content">
+<div class="paragraph">
+<p>example block
+with line break</p>
+</div>
+</div>
+</div>
+<div class="literalblock">
+<div class="title">literal block</div>
+<div class="content">
+<pre>_literal_ block
+with line break</pre>
+</div>
+</div>
+pass block
+with <u>underlined text</u>
+<div class="quoteblock">
+<div class="title">quote block</div>
+<blockquote>
+<div class="paragraph">
+<p>quote block
+with line break</p>
+</div>
+</blockquote>
+</div>
+<div class="sidebarblock">
+<div class="content">
+<div class="title">sidebar block</div>
+<div class="paragraph">
+<p>sidebar block
+with line break</p>
+</div>
+</div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Note</div>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>This is an example of an admonition block.</p>
 </div>
 <div class="paragraph">
-<p><a href="https://git.venberg.xyz/Gabe/adocStaticSiteGen" class="bare">https://git.venberg.xyz/Gabe/adocStaticSiteGen</a></p>
+<p>Unlike an admonition paragraph, it may contain any AsciiDoc content.
+The style can be any one of the admonition labels:</p>
 </div>
-<div class="videoblock">
-<div class="title">A mechanical marvel</div>
-<div class="content">
-<iframe src="https://www.youtube.com/embed/IvUU8joBb1Q?rel=0" frameborder="0" allowfullscreen></iframe>
+<div class="ulist">
+<ul>
+<li>
+<p>NOTE</p>
+</li>
+<li>
+<p>TIP</p>
+</li>
+<li>
+<p>WARNING</p>
+</li>
+<li>
+<p>CAUTION</p>
+</li>
+<li>
+<p>IMPORTANT</p>
+</li>
+</ul>
+</div>
+</td>
+</tr>
+</table>
 </div>
 </div>
-<div class="paragraph">
-<p><a href="../../landing_page.html#_link_tests">back to where you came!</a></p>
+</div>
 </div>
 </div>
 <div id="footer">
 <div id="footer-text">
+Last updated 2021-08-15 10:12:20 -0500
 </div>
 </div>
 </body>
