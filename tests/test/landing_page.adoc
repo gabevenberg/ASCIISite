@@ -131,4 +131,4 @@ It's designed for:
 
 |===
 
-include::{includedir}/include.adoc[]
+include::{includedir}/include.txt[]
