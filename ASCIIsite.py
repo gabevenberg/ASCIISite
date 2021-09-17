@@ -12,6 +12,7 @@ def parse_arguments():
     parser.add_argument('inputDir', type=Path, help='The directory of adoc files to be copied and converted.')
     parser.add_argument('-o', '--output', type=Path, help='What to name the generated directory or tar file')
     parser.add_argument('-z', '--compress', action='store_true', help='whether to compress the resulting directory to a tar.gz file. can be usefull for scripting to transfer the site to a remote server.')
+    parser.add_argument('--exclude', nargs='+', help='A list of glob patterns to ignore. Remember to quote them so your shell doesnt escape them!')
     args=parser.parse_args()
 
     #set compress flag
@@ -43,15 +44,17 @@ def parse_arguments():
     logging.info(f'outputting to {outFile.resolve()}')
     logging.debug(f'compress is {compress}')
 
-    return args.inputDir.resolve(), outFile, compress
+    return args.inputDir.resolve(), outFile, compress, args.exclude
 
 #Doing it in a tmpDir first, as some distrubutions put temp files on a ramdisk. this should speed up the operation sigificantly.
 class TmpDir:
-    def __init__(self, srcDir):
+    def __init__(self, srcDir, exclude):
         self.tmpDir=tempfile.TemporaryDirectory()
         logging.debug(f'making tmp file from {srcDir} at {self.tmpDir.name}')
         self.path=self.tmpDir.name+'/'+Path(srcDir).resolve().name
-        self.ignorePattern=shutil.ignore_patterns('*.adoc', '.git', '.gitignore')
+        self.ignorePatterns=['*.adoc', '.gitignore', '.git/*']
+        self.ignorePatterns.extend(exclude)
+        self.ignorePattern=shutil.ignore_patterns(*self.ignorePatterns)
         shutil.copytree(srcDir, self.path, ignore=self.ignorePattern, symlinks=False)
 
     #copy out from tmpDir (which may be in RAM, depending on distrubution) to disk
@@ -92,9 +95,9 @@ def convert_file(inDir, outDir, inFile):
         logging.error(f'stdOut was {e.stdout}')
 
 if __name__ == '__main__':
-    inFile, outFile, compress=parse_arguments()
+    inFile, outFile, compress, exclude=parse_arguments()
     os.chdir(inFile)
-    tmpDir=TmpDir('./')
+    tmpDir=TmpDir('./', exclude)
     pathsToConvert=find_paths_to_convert('*.adoc')
 
     for i in pathsToConvert:
