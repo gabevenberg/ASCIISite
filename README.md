@@ -3,13 +3,17 @@
 ![Licence](https://img.shields.io/badge/Licence-GPL-blue)
 
 ## What is it?
-ASCIIsite is a simple, barebones static site generator. You give it a directory contaning asciidoctor documents and supporing media in the strucutre you want your site to be in, and it spits out a fully functional static site based on that input directory.
+ASCIIsite is a simple, bare bones static site generator. You give it a directory containing asciidoctor documents and supporting media in the structure you want your site to be in, and it spits out a fully functional static site based on that input directory.
 
 ## Usage
 
-ASCIISite takes 2 (so far) optional arguments followed by the single mandatory arument telling it what directory to convert.
+ASCIISite takes 2 (so far) optional arguments followed by the single mandatory argument telling it what directory to convert.
 
 the -o or --output option simply tells ASCIISite what to name the output file.
+
+the --exclude flag allows you to specify a list of glob patterns. Any file matching these glob patterns will not be copied to the output.
+This is helpful for any files that are needed for the compilation of the asciidoc files, but do not need to be in the final site.
+The main use case I am aware of is files that are put into an asciidoc document via an include statement.
 
 the -z or --compress flag tells ASCIISite to put the final product in a compressed tar.gz file as its output. 
 This is especially useful if you are running ASCIISite on your personal computer, and will be uploading the tar.gz file to your server.
@@ -29,7 +33,7 @@ test
 ├── images
 │   └── test_pattern.svg
 ├── include
-│   └── include.adoc
+│   └── include.txt
 └── landing_page.adoc
 ```
 
@@ -50,7 +54,25 @@ result
 ├── images
 │   └── test_pattern.svg
 ├── include
-│   └── include.html
+│   └── include.txt
+└── landing_page.html
+```
+
+If, say, the include directory is a directory needed for the asciidoc compilation,
+but not needed for the final website, you can use the --exclude option to specify a list of glob patterns to exclude. For example, 
+````
+ASCIIsite.py --exclude 'include*' -o output test
+```
+
+will get you an output like:
+```
+result
+├── dir
+│   ├── collatz.py
+│   └── subdir
+│       └── linked.html
+├── images
+│   └── test_pattern.svg
 └── landing_page.html
 ```
 
