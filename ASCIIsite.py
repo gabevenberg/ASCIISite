@@ -11,8 +11,9 @@ def parse_arguments():
     parser=argparse.ArgumentParser(description='create a website directory structure by converting .adoc files in a directory strucutre to .html files.')
     parser.add_argument('inputDir', type=Path, help='The directory of adoc files to be copied and converted.')
     parser.add_argument('-o', '--output', type=Path, help='What to name the generated directory or tar file')
-    parser.add_argument('-z', '--compress', action='store_true', help='whether to compress the resulting directory to a tar.gz file. can be usefull for scripting to transfer the site to a remote server.')
+    parser.add_argument('--exclude-file', type=Path, help='A text file containing glob patterns to exclude, 1 per line.')
     parser.add_argument('--exclude', nargs='+', help='A list of glob patterns to ignore. Remember to quote them so your shell doesnt escape them!')
+    parser.add_argument('-z', '--compress', action='store_true', help='whether to compress the resulting directory to a tar.gz file. can be usefull for scripting to transfer the site to a remote server.')
     args=parser.parse_args()
 
     #set compress flag
@@ -44,7 +45,21 @@ def parse_arguments():
     logging.info(f'outputting to {outFile.resolve()}')
     logging.debug(f'compress is {compress}')
 
-    return args.inputDir.resolve(), outFile, compress, args.exclude
+    try:
+        with open(args.exclude_file, 'r') as file:
+            exclude=[glob.strip() for glob in file]
+
+        if args.exclude != None:
+            exclude.extend(args.exclude)
+    except Exception as e:
+        print(str(e))
+        exit()
+
+    if args.inputDir.resolve().exists():
+        print(f'Inputdir {args.inputDir.resolve()} does not exist!')
+        exit()
+
+    return args.inputDir.resolve(), outFile, compress, exclude
 
 #Doing it in a tmpDir first, as some distrubutions put temp files on a ramdisk. this should speed up the operation sigificantly.
 class TmpDir:
