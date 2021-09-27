@@ -45,11 +45,19 @@ def parse_arguments():
     logging.info(f'outputting to {outFile.resolve()}')
     logging.debug(f'compress is {compress}')
 
-    with open(args.exclude_file, 'r') as file:
-        exclude=[glob.strip() for glob in file]
+    try:
+        with open(args.exclude_file, 'r') as file:
+            exclude=[glob.strip() for glob in file]
 
-    if args.exclude != None:
-        exclude.extend(args.exclude)
+        if args.exclude != None:
+            exclude.extend(args.exclude)
+    except Exception as e:
+        print(str(e))
+        exit()
+
+    if args.inputDir.resolve().exists():
+        print(f'Inputdir {args.inputDir.resolve()} does not exist!')
+        exit()
 
     return args.inputDir.resolve(), outFile, compress, exclude
 
