@@ -6,6 +6,7 @@ Gabe Venberg
 :giturl: https://git.venberg.xyz/Gabe/adocStaticSiteGen
 :toc:
 :icons: font
+:stem: latexmath
 :includedir: include/
 
 
@@ -48,6 +49,9 @@ _*italic bold test*_
 
 -> => <- <=
 
+==colapsable block
+[%collapsible]
+====
 == list tests
 
 .unordered list test
@@ -84,6 +88,15 @@ _*italic bold test*_
 . consectetur
 ** adipiscing
 ** elit
+
+====
+
+.math test
+stem:[\frac{\frac{1}{x}+\frac{1}{y}}{y-z}]
+[asciimath]
+++++
+[[a,b\],[c,d\]\]((n),(k))
+++++
 
 .description list test
 [horizontal]
