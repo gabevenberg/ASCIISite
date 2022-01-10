@@ -6,6 +6,7 @@ result=$(find . -type f -print0 | xargs -0 -P0 -n1 md5sum | sort -k 2 | md5sum)
 cd ../control
 control=$(find . -type f -print0 | xargs -0 -P0 -n1 md5sum | sort -k 2 | md5sum)
 cd ../
+tree result
 echo result sum is $result
 echo control sum is $control
 if [ "$result" = "$control" ]; then

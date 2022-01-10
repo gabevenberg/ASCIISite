@@ -1,6 +1,5 @@
 = relatively linked doc
 Gabe Venberg
-:imagesdir: ../../images
 :reproducible:
 :giturl: git.venberg.xyz/Gabe/adocStaticSiteGen
 

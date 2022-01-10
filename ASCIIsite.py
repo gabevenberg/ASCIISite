@@ -51,15 +51,13 @@ def parse_arguments():
     logging.info(f'outputting to {outFile.resolve()}')
     logging.debug(f'compress is {compress}')
 
-    try:
+    exclude=[]
+    if args.exclude_file != None:
         with open(args.exclude_file, 'r') as file:
             exclude=[glob.strip() for glob in file]
 
-        if args.exclude != None:
-            exclude.extend(args.exclude)
-    except Exception as e:
-        print(str(e))
-        exit()
+    if args.exclude != None:
+        exclude.extend(args.exclude)
 
     if not args.inputDir.resolve().exists():
         print(f'Inputdir {args.inputDir.resolve()} does not exist!')
@@ -97,13 +95,31 @@ class TmpDir:
 def find_paths_to_convert(fileNameGlob):
     return glob.glob(f'**/{fileNameGlob}', recursive=True)
 
+#finds the depth of a file relative to given directory
+def find_relative_file_depth (subfile, parentDir):
+    subfile=Path(subfile).resolve()
+    parentDir=Path(parentDir).resolve()
+    return len(subfile.parts)-len(parentDir.parts)-1
+
 #simple wrapper around the asciidoctor cli.
 def convert_file(inDir, outDir, inFile):
+    #in order for the stylesdir and imagesdir to be linked to correctly, we need to know the relative depth between the two directories.
+    depth=find_relative_file_depth(inFile, inDir)
+
     logging.info(f'converting {Path(inFile).resolve()}')
-    logging.debug(f'converting {inFile} from directory {inDir} to directory {outDir}')
+    logging.debug(f'converting {inFile} from directory {inDir} to directory {outDir} with a relative depth of {depth}')
+
+    depthstring= '../'*depth
+
     try:
         #the destdir can be used instead of destfile in order to preserve the directory structure relative to the base dir. really useful.
         subprocess.run(['asciidoctor',
+            #makes the stylesheet linked, but still includes it in the output.
+            '--attribute=linkcss',
+            '--attribute=copycss',
+            f'--attribute=stylesdir={depthstring}css',
+            #set imagesdir
+            f'--attribute=imagesdir={depthstring}images',
             #specifies the source directory root.
             f'--source-dir={inDir}',
             #Destination dir. It takes the file from the subtree --source-dir and puts it in the equivilant location in the subtree --destination-dir. (talking about filesystem subtrees).
