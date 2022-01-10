@@ -55,7 +55,7 @@ def parse_arguments():
         print(str(e))
         exit()
 
-    if args.inputDir.resolve().exists():
+    if not args.inputDir.resolve().exists():
         print(f'Inputdir {args.inputDir.resolve()} does not exist!')
         exit()
 
