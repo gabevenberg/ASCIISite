@@ -14,7 +14,13 @@ def parse_arguments():
     parser.add_argument('--exclude-file', type=Path, help='A text file containing glob patterns to exclude, 1 per line.')
     parser.add_argument('--exclude', nargs='+', help='A list of glob patterns to ignore. Remember to quote them so your shell doesnt escape them!')
     parser.add_argument('-z', '--compress', action='store_true', help='whether to compress the resulting directory to a tar.gz file. can be usefull for scripting to transfer the site to a remote server.')
+    parser.add_argument('-v', '--verbose', action='store_true', help='outputs debug messages onto the console.')
     args=parser.parse_args()
+
+    #setting log level
+    if args.verbose:
+        logging.info('setting log level to verbose')
+        logging.getLogger().setLevel(level=logging.DEBUG)
 
     #set compress flag
     if args.output != None and not args.compress:
