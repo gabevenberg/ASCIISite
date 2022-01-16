@@ -1,13 +1,25 @@
 = relatively linked doc
 Gabe Venberg
-:imagesdir: ../../images/
 :reproducible:
 :giturl: git.venberg.xyz/Gabe/adocStaticSiteGen
 
 [#test-pattern]
 .Technical Difficulties
 [link={giturl}]
-image::test_patern.jpg[Stand By]
+image::test_pattern.svg[Stand By]
+
+[quote, Lawrence Lessig, May the Source Be With You]
+While the creative works from the 16th century can still be accessed and used by others, the data in some software programs from the 1990s is already inaccessible. Once a company that produces a certain product goes out of business, it has no simple way to uncover how its product encoded data. The code is thus lost, and the software is inaccessible. Knowledge has been destroyed.
+
+[verse, J.R.R. Tolkien, The Fellowship of the Ring]
+Three Rings for the Elven-kings under the sky,
+Seven for the dwarf-lords in their halls of stone,
+Nine for Mortal Men doomed to die,
+One for the Dark Lord on his dark throne,
+In the Land of Mordor where the Shadows lie.
+One Ring to rule them all, One Ring to find them,
+One Ring to bring them all and in the darkness bind them
+In the Land of Mordor where the Shadows lie.
 
 https://git.venberg.xyz/Gabe/adocStaticSiteGen
 

@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Asciidoctor 2.0.17">
+<meta name="author" content="Gabe Venberg">
+<title>test page for an adoc static site generator.</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700">
+<link rel="stylesheet" href="css/asciidoctor.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+</head>
+<body class="article">
+<div id="header">
+<h1>test page for an adoc static site generator.</h1>
+<div class="details">
+<span id="author" class="author">Gabe Venberg</span><br>
+</div>
+<div id="toc" class="toc">
+<div id="toctitle">Table of Contents</div>
+<ul class="sectlevel1">
+<li><a href="#_inline_formatting_tests">inline formatting tests</a></li>
+<li><a href="#_link_tests">link tests</a></li>
+<li><a href="#_tables_test">tables test</a></li>
+<li><a href="#_included_section">included section</a>
+<ul class="sectlevel2">
+<li><a href="#_blocks">blocks</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div id="content">
+<div id="preamble">
+<div class="sectionbody">
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-important" title="Important"></i>
+</td>
+<td class="content">
+Test the links in this page!
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+Phasellus mi tellus, suscipit in dolor nec, faucibus aliquam nulla.
+Mauris gravida, felis commodo molestie tincidunt, sem erat varius lorem, nec lobortis eros sem ut augue.
+Donec suscipit tristique imperdiet.
+Sed maximus est ultrices urna imperdiet, vitae facilisis eros posuere.
+Quisque a mollis mauris.
+Pellentesque fermentum, libero sed sollicitudin interdum, dolor nunc euismod purus, et laoreet tellus augue vitae turpis.
+Pellentesque condimentum elit quis semper tincidunt.
+Nullam consectetur euismod accumsan.
+In dictum nibh ut iaculis euismod.
+Phasellus ut nibh non ipsum volutpat cursus.
+Sed eleifend, enim vitae ultrices auctor, dolor ipsum molestie dui, id dignissim massa neque a mauris.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_inline_formatting_tests">inline formatting tests</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p><strong>bold test</strong></p>
+</div>
+<div class="paragraph">
+<p><em>italics test</em></p>
+</div>
+<div class="paragraph">
+<p>'monospace test'</p>
+</div>
+<div class="paragraph">
+<p>'<strong>monospace bold test</strong>'</p>
+</div>
+<div class="paragraph">
+<p>'<em>monospace italic test</em>'</p>
+</div>
+<div class="paragraph">
+<p><em>*italic bold test*</em></p>
+</div>
+<div class="paragraph">
+<p>'<strong><em>all three test</em></strong>'</p>
+</div>
+<div class="paragraph">
+<p>*escaped bold test*</p>
+</div>
+<div class="paragraph">
+<p><u>underline test using html passthrough test</u></p>
+</div>
+<div class="paragraph">
+<p>*escaped bold test with plus*</p>
+</div>
+<div class="paragraph">
+<p>&#8594; &#8658; &#8592; &#8656;</p>
+</div>
+<div class="paragraph">
+<p>==colapsable block</p>
+</div>
+<details>
+<summary class="title">Details</summary>
+<div class="content">
+<div class="paragraph">
+<p>== list tests</p>
+</div>
+<div class="ulist">
+<div class="title">unordered list test</div>
+<ul>
+<li>
+<p>Lorum</p>
+</li>
+<li>
+<p>ipsum</p>
+<div class="ulist">
+<ul>
+<li>
+<p>dolor</p>
+</li>
+<li>
+<p>sit</p>
+<div class="ulist">
+<ul>
+<li>
+<p>amet</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>consectetur</p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+<div class="olist arabic">
+<div class="title">ordered list test.</div>
+<ol class="arabic">
+<li>
+<p>Lorum</p>
+</li>
+<li>
+<p>ipsum</p>
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
+<li>
+<p>dolor</p>
+</li>
+<li>
+<p>sit</p>
+<div class="olist lowerroman">
+<ol class="lowerroman" type="i">
+<li>
+<p>amet</p>
+</li>
+</ol>
+</div>
+</li>
+<li>
+<p>consectetur</p>
+</li>
+</ol>
+</div>
+</li>
+</ol>
+</div>
+<div class="olist arabic">
+<div class="title">reversed ordered list test.</div>
+<ol class="arabic" reversed>
+<li>
+<p>Lorum</p>
+</li>
+<li>
+<p>ipsum</p>
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
+<li>
+<p>dolor</p>
+</li>
+<li>
+<p>sit</p>
+<div class="olist lowerroman">
+<ol class="lowerroman" type="i">
+<li>
+<p>amet</p>
+</li>
+</ol>
+</div>
+</li>
+<li>
+<p>consectetur</p>
+</li>
+</ol>
+</div>
+</li>
+</ol>
+</div>
+<div class="olist arabic">
+<div class="title">mixed list</div>
+<ol class="arabic">
+<li>
+<p>Lorum</p>
+</li>
+<li>
+<p>ipsum</p>
+<div class="ulist">
+<ul>
+<li>
+<p>dolor</p>
+</li>
+<li>
+<p>sit</p>
+<div class="ulist">
+<ul>
+<li>
+<p>amet</p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>consectetur</p>
+<div class="ulist">
+<ul>
+<li>
+<p>adipiscing</p>
+</li>
+<li>
+<p>elit</p>
+</li>
+</ul>
+</div>
+</li>
+</ol>
+</div>
+</div>
+</details>
+<div class="paragraph">
+<div class="title">math test</div>
+<p>\(\frac{\frac{1}{x}+\frac{1}{y}}{y-z}\)</p>
+</div>
+<div class="stemblock">
+<div class="content">
+\$[[a,b\],[c,d\]\]((n),(k))\$
+</div>
+</div>
+<div class="hdlist">
+<div class="title">description list test</div>
+<table>
+<tr>
+<td class="hdlist1">
+test
+</td>
+<td class="hdlist2">
+<p>to make sure software works correctly</p>
+</td>
+</tr>
+<tr>
+<td class="hdlist1">
+git
+</td>
+<td class="hdlist2">
+<p>a gift from the machine spirits</p>
+</td>
+</tr>
+<tr>
+<td class="hdlist1">
+printers
+</td>
+<td class="hdlist2">
+<p>the greatest evil to ever befall IT.</p>
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_link_tests">link tests</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Lets go back to the <a href="#list tests">[list tests]</a> or to the <a href="#_tables_test">tables</a></p>
+</div>
+<div class="paragraph">
+<p><a href="https://git.venberg.xyz/Gabe/adocStaticSiteGen">gittea absolute link</a></p>
+</div>
+<div class="imageblock">
+<div class="content">
+<a class="image" href="https://git.venberg.xyz/Gabe/adocStaticSiteGen"><img src="images/test_pattern.svg" alt="Stand By"></a>
+</div>
+<div class="title">Figure 1. Technical Difficulties</div>
+</div>
+<div class="paragraph">
+<p><a href="dir/subdir/linked.html">link!</a></p>
+</div>
+<div class="paragraph">
+<p><a href="dir/subdir/linked.html">xref!</a></p>
+</div>
+<div class="listingblock">
+<div class="title">Source code test</div>
+<div class="content">
+<pre class="highlight"><code class="language-python" data-lang="python">def nextInSequence(number):
+    if isinstance(number, int):
+        if number % 2 == 0:
+            return number // 2
+        else:
+            return 3*number+1
+    else:
+        raise TypeError('input must be int!')
+
+def seqenceLength(number):
+    length = 0
+    while number != 1:
+        number = nextInSequence(number)
+        length += 1
+    return length</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_tables_test">tables test</h2>
+<div class="sectionbody">
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Name</th>
+<th class="tableblock halign-left valign-top">Group</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Firefox</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Web Browser</p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>Mozilla Firefox is an open-source web browser.
+It&#8217;s designed for:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>standards compliance,</p>
+</li>
+<li>
+<p>performance and</p>
+</li>
+<li>
+<p>portability.</p>
+</li>
+</ul>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Ruby</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Programming Language</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">A programmer&#8217;s best friend.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_included_section">included section</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Fusce maximus nec magna eu ultricies.
+Fusce quis tellus vitae arcu facilisis lobortis.
+Donec id erat at enim porta placerat in vitae sapien.
+Duis justo arcu, hendrerit nec nulla eu, dictum dapibus ipsum.
+Sed fermentum id elit eget fringilla.
+Suspendisse volutpat imperdiet justo, ut efficitur odio maximus et.
+Nunc interdum sollicitudin eros sit amet convallis.
+Praesent volutpat tempus metus id tincidunt.
+Proin aliquet justo a fermentum consectetur.
+Nunc scelerisque, nisi id scelerisque dictum, nibh lectus ultrices nunc, quis ultricies erat velit sit amet urna.
+Maecenas orci felis, volutpat at bibendum ut, mattis eu justo.</p>
+</div>
+<div class="sect2">
+<h3 id="_blocks">blocks</h3>
+<div class="listingblock">
+<div class="title">listing block</div>
+<div class="content">
+<pre>example of _listing block_
+with verbatim line break</pre>
+</div>
+</div>
+<div class="exampleblock">
+<div class="title">Example 1. example block</div>
+<div class="content">
+<div class="paragraph">
+<p>example block
+with line break</p>
+</div>
+</div>
+</div>
+<div class="literalblock">
+<div class="title">literal block</div>
+<div class="content">
+<pre>_literal_ block
+with line break</pre>
+</div>
+</div>
+pass block
+with <u>underlined text</u>
+<div class="quoteblock">
+<div class="title">quote block</div>
+<blockquote>
+<div class="paragraph">
+<p>quote block
+with line break</p>
+</div>
+</blockquote>
+</div>
+<div class="sidebarblock">
+<div class="content">
+<div class="title">sidebar block</div>
+<div class="paragraph">
+<p>sidebar block
+with line break</p>
+</div>
+</div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>This is an example of an admonition block.</p>
+</div>
+<div class="paragraph">
+<p>Unlike an admonition paragraph, it may contain any AsciiDoc content.
+The style can be any one of the admonition labels:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>NOTE</p>
+</li>
+<li>
+<p>TIP</p>
+</li>
+<li>
+<p>WARNING</p>
+</li>
+<li>
+<p>CAUTION</p>
+</li>
+<li>
+<p>IMPORTANT</p>
+</li>
+</ul>
+</div>
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id="footer">
+<div id="footer-text">
+</div>
+</div>
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  messageStyle: "none",
+  tex2jax: {
+    inlineMath: [["\\(", "\\)"]],
+    displayMath: [["\\[", "\\]"]],
+    ignoreClass: "nostem|nolatexmath"
+  },
+  asciimath2jax: {
+    delimiters: [["\\$", "\\$"]],
+    ignoreClass: "nostem|noasciimath"
+  },
+  TeX: { equationNumbers: { autoNumber: "none" } }
+})
+MathJax.Hub.Register.StartupHook("AsciiMath Jax Ready", function () {
+  MathJax.InputJax.AsciiMath.postfilterHooks.Add(function (data, node) {
+    if ((node = data.script.parentNode) && (node = node.parentNode) && node.classList.contains("stemblock")) {
+      data.math.root.display = "block"
+    }
+    return data
+  })
+})
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/MathJax.js?config=TeX-MML-AM_HTMLorMML"></script>
+</body>
+</html>
