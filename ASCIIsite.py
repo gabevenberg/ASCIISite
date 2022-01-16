@@ -11,6 +11,7 @@ def parse_arguments():
     parser=argparse.ArgumentParser(description='create a website directory structure by converting .adoc files in a directory strucutre to .html files.')
     parser.add_argument('inputDir', type=Path, help='The directory of adoc files to be copied and converted.')
     parser.add_argument('-o', '--output', type=Path, help='What to name the generated directory or tar file')
+    parser.add_argument('--stylesheet', type=Path, help='A custom CSS file to be applied to the output.')
     parser.add_argument('--exclude-file', type=Path, help='A text file containing glob patterns to exclude, 1 per line.')
     parser.add_argument('--exclude', nargs='+', help='A list of glob patterns to ignore. Remember to quote them so your shell doesnt escape them!')
     parser.add_argument('-z', '--compress', action='store_true', help='whether to compress the resulting directory to a tar.gz file. can be usefull for scripting to transfer the site to a remote server.')
@@ -51,21 +52,24 @@ def parse_arguments():
     logging.info(f'outputting to {outFile.resolve()}')
     logging.debug(f'compress is {compress}')
 
-    try:
+    exclude=[]
+    if args.exclude_file != None:
         with open(args.exclude_file, 'r') as file:
             exclude=[glob.strip() for glob in file]
 
-        if args.exclude != None:
-            exclude.extend(args.exclude)
-    except Exception as e:
-        print(str(e))
-        exit()
+    if args.exclude != None:
+        exclude.extend(args.exclude)
 
     if not args.inputDir.resolve().exists():
         print(f'Inputdir {args.inputDir.resolve()} does not exist!')
         exit()
 
-    return args.inputDir.resolve(), outFile, compress, exclude
+    stylesheet=None
+    if args.stylesheet != None:
+        stylesheet =args.stylesheet.resolve()
+        logging.info(f'using stylesheet {stylesheet}')
+
+    return args.inputDir.resolve(), outFile, stylesheet, compress, exclude
 
 #Doing it in a tmpDir first, as some distrubutions put temp files on a ramdisk. this should speed up the operation sigificantly.
 class TmpDir:
@@ -97,32 +101,55 @@ class TmpDir:
 def find_paths_to_convert(fileNameGlob):
     return glob.glob(f'**/{fileNameGlob}', recursive=True)
 
+#finds the depth of a file relative to given directory
+def find_relative_file_depth (subfile, parentDir):
+    subfile=Path(subfile).resolve()
+    parentDir=Path(parentDir).resolve()
+    return len(subfile.parts)-len(parentDir.parts)-1
+
 #simple wrapper around the asciidoctor cli.
-def convert_file(inDir, outDir, inFile):
+def convert_file(inDir: Path, outDir: Path, inFile: Path, stylesheet: Path):
+    #in order for the stylesdir and imagesdir to be linked to correctly, we need to know the relative depth between the two directories.
+    depth=find_relative_file_depth(inFile, inDir)
+
     logging.info(f'converting {Path(inFile).resolve()}')
-    logging.debug(f'converting {inFile} from directory {inDir} to directory {outDir}')
-    try:
-        #the destdir can be used instead of destfile in order to preserve the directory structure relative to the base dir. really useful.
-        subprocess.run(['asciidoctor',
+    logging.debug(f'converting {inFile=}, {outDir=}, {inDir=}, {stylesheet=}')
+
+    depthstring= '../'*depth
+
+    arguments=['asciidoctor',
+            #makes the stylesheet linked, but still includes it in the output.
+            '--attribute=linkcss',
+            f'--attribute=stylesdir={depthstring}css',
+            #set imagesdir
+            f'--attribute=imagesdir={depthstring}images',
             #specifies the source directory root.
             f'--source-dir={inDir}',
             #Destination dir. It takes the file from the subtree --source-dir and puts it in the equivilant location in the subtree --destination-dir. (talking about filesystem subtrees).
             f'--destination-dir={outDir}',
-            inFile],
-            check=True)
+            inFile]
+    
+    if stylesheet != None:
+        arguments.insert(1, f'--attribute=copycss={stylesheet}')
+        arguments.insert(1, f'--attribute=stylesheet={stylesheet.name}')
+    else:
+        arguments.insert(1, f'--attribute=copycss')
+    logging.debug(f'{arguments=}')
+    try:
+        #the destdir can be used instead of destfile in order to preserve the directory structure relative to the base dir. really useful.
+        subprocess.run(arguments, check=True)
     except Exception as e:
         logging.error(f'could not convert {inFile}!')
-        logging.error(f'stdErr was {e.stderr}')
-        logging.error(f'stdOut was {e.stdout}')
+        logging.error(f'{e}')
 
 if __name__ == '__main__':
-    inFile, outFile, compress, exclude=parse_arguments()
+    inFile, outFile, stylesheet, compress, exclude=parse_arguments()
     os.chdir(inFile)
     tmpDir=TmpDir('./', exclude)
     pathsToConvert=find_paths_to_convert('*.adoc')
 
     for i in pathsToConvert:
-        convert_file('./', tmpDir.path, i)
+        convert_file(inDir='./', outDir=tmpDir.path, inFile=i, stylesheet=stylesheet)
 
     if compress:
         tmpDir.compress_and_copy_self_to(outFile)

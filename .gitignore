@@ -1,5 +1,6 @@
 #test result
-result/*
+tests/result*
+tests/result*
 #vim session files
 *.vims
 

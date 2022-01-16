@@ -1,6 +1,5 @@
 = test page for an adoc static site generator.
 Gabe Venberg
-:imagesdir: images
 :docdate: 2021-08-06
 :reproducible:
 :giturl: https://git.venberg.xyz/Gabe/adocStaticSiteGen
