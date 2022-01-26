@@ -32,7 +32,7 @@ def parse_arguments():
             compress=False
     else:
         compress=args.compress
-    
+
     #If outfile was not set, set it.
     if args.output == None:
         baseName=args.inputDir.with_name(args.inputDir.name+'_compiled').name
@@ -128,7 +128,7 @@ def convert_file(inDir: Path, outDir: Path, inFile: Path, stylesheet: Path):
             #Destination dir. It takes the file from the subtree --source-dir and puts it in the equivilant location in the subtree --destination-dir. (talking about filesystem subtrees).
             f'--destination-dir={outDir}',
             inFile]
-    
+
     if stylesheet != None:
         arguments.insert(1, f'--attribute=copycss={stylesheet}')
         arguments.insert(1, f'--attribute=stylesheet={stylesheet.name}')
