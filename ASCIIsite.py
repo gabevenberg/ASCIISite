@@ -1,13 +1,13 @@
 #! /usr/bin/env python3
 #takes directory, converts all .adoc files to html files, copying the resulting html files to an identical directory strucuture, and copies over all non .adoc files unchanged. Optionally outputs as a tar.gz file.
 
-import subprocess, sys, argparse, logging, tempfile, shutil, os, glob
+import subprocess, argparse, logging, tempfile, shutil, os, glob
 from pathlib import Path
 
 logging.basicConfig(format='%(asctime)s:%(message)s', level=logging.INFO)
 #logging.basicConfig(format='%(asctime)s:%(message)s', level=logging.DEBUG)
 
-def parse_arguments():
+def parse_arguments()->tuple[Path, Path, Path | None, bool, list[str]]:
     parser=argparse.ArgumentParser(description='create a website directory structure by converting .adoc files in a directory strucutre to .html files.')
     parser.add_argument('inputDir', type=Path, help='The directory of adoc files to be copied and converted.')
     parser.add_argument('-o', '--output', type=Path, help='What to name the generated directory or tar file')
@@ -27,23 +27,23 @@ def parse_arguments():
     if args.output != None and not args.compress:
         #detect based on whether outFile has a .tar.gz filename.
         if args.output.suffixes == ['.tar', '.gz']:
-            compress=True
+            compress:bool=True
         else:
-            compress=False
+            compress:bool=False
     else:
-        compress=args.compress
+        compress:bool=args.compress
 
     #If outfile was not set, set it.
     if args.output == None:
-        baseName=args.inputDir.with_name(args.inputDir.name+'_compiled').name
-        outFile=Path(os.getcwd()).joinpath(baseName)
+        baseName:str=args.inputDir.with_name(args.inputDir.name+'_compiled').name
+        outFile:Path=Path(os.getcwd()).joinpath(baseName)
     else:
-        outFile=args.output.resolve()
+        outFile:Path=Path(args.output.resolve())
 
     #add .tar.gz if compress is set and the outfile does not already have it.
     if compress and outFile.suffixes != ['.tar', '.gz']:
         logging.info(f'outFile was {outFile}, corrected because compress flag is set.')
-        outFile=outFile.with_suffix('.tar.gz').resolve()
+        outFile:Path=outFile.with_suffix('.tar.gz').resolve()
 
     if args.inputDir.resolve() == outFile.resolve():
         raise FileExistsError('output file cannot have the same path as the input file!')
@@ -52,7 +52,7 @@ def parse_arguments():
     logging.info(f'outputting to {outFile.resolve()}')
     logging.debug(f'compress is {compress}')
 
-    exclude=[]
+    exclude:list[str]=[]
     if args.exclude_file != None:
         with open(args.exclude_file, 'r') as file:
             exclude=[glob.strip() for glob in file]
@@ -64,53 +64,56 @@ def parse_arguments():
         print(f'Inputdir {args.inputDir.resolve()} does not exist!')
         exit()
 
-    stylesheet=None
+    stylesheet:Path|None=None
     if args.stylesheet != None:
-        stylesheet =args.stylesheet.resolve()
+        stylesheet=args.stylesheet.resolve()
         logging.info(f'using stylesheet {stylesheet}')
 
-    return args.inputDir.resolve(), outFile, stylesheet, compress, exclude
+    return Path(args.inputDir.resolve()), outFile, stylesheet, compress, exclude
 
 #Doing it in a tmpDir first, as some distrubutions put temp files on a ramdisk. this should speed up the operation sigificantly.
 class TmpDir:
-    def __init__(self, srcDir, exclude):
+    def __init__(self, srcDir:Path, exclude:list[str]):
         self.tmpDir=tempfile.TemporaryDirectory()
         logging.debug(f'making tmp file from {srcDir} at {self.tmpDir.name}')
-        self.path=self.tmpDir.name+'/'+Path(srcDir).resolve().name
-        self.ignorePatterns=['*.adoc', '.gitignore', '.git/*']
+        self.path:Path=Path(self.tmpDir.name+'/'+Path(srcDir).resolve().name)
+        self.ignorePatterns:list[str]=['*.adoc', '.gitignore', '.git/*']
         self.ignorePatterns.extend(exclude)
         self.ignorePattern=shutil.ignore_patterns(*self.ignorePatterns)
         shutil.copytree(srcDir, self.path, ignore=self.ignorePattern, symlinks=False)
 
     #copy out from tmpDir (which may be in RAM, depending on distrubution) to disk
-    def copy_self_to(self, destPath):
+    def copy_self_to(self, destPath:Path):
         logging.debug(f'outputting to {Path(destPath).resolve()}')
         shutil.copytree(self.path, destPath, symlinks=False)
 
     #copy out from tmpDir (which may be in RAM, depending on distrubution) to a compressed file on disk
-    def compress_and_copy_self_to(self, destPath):
+    def compress_and_copy_self_to(self, destPath:Path)->Path:
         #shutil.make_archive wants destPath to be without file extentions for some godforsaken reason.
         destPath=Path(destPath.with_name(destPath.name.split('.')[0])).resolve()
         logging.debug(f'compressing to {Path(destPath).resolve()} from {Path(self.path).parent}')
-        tarFile=shutil.make_archive(destPath, 'gztar', Path(self.path).parent)
+        tarFile:Path=Path(shutil.make_archive(str(destPath), 'gztar', Path(self.path).parent))
+        return tarFile
 
     def cleanup(self):
         self.tmpDir.cleanup()
 
 #works on the current working directory
-def find_paths_to_convert(fileNameGlob):
-    return glob.glob(f'**/{fileNameGlob}', recursive=True)
+def find_paths_to_convert(fileNameGlob:str)->list[Path]:
+    pathstrings: list[str] = glob.glob(f'**/{fileNameGlob}', recursive=True)
+    paths:list[Path]=[Path(i) for i in pathstrings]
+    return paths
 
 #finds the depth of a file relative to given directory
-def find_relative_file_depth (subfile, parentDir):
+def find_relative_file_depth (subfile:Path, parentDir:Path)->int:
     subfile=Path(subfile).resolve()
     parentDir=Path(parentDir).resolve()
     return len(subfile.parts)-len(parentDir.parts)-1
 
 #simple wrapper around the asciidoctor cli.
-def convert_file(inDir: Path, outDir: Path, inFile: Path, stylesheet: Path):
+def convert_file(inDir: Path, outDir: Path, inFile: Path, stylesheet: Path|None):
     #in order for the stylesdir and imagesdir to be linked to correctly, we need to know the relative depth between the two directories.
-    depth=find_relative_file_depth(inFile, inDir)
+    depth:int=find_relative_file_depth(inFile, inDir)
 
     logging.info(f'converting {Path(inFile).resolve()}')
     logging.debug(f'converting {inFile=}, {outDir=}, {inDir=}, {stylesheet=}')
@@ -145,11 +148,11 @@ def convert_file(inDir: Path, outDir: Path, inFile: Path, stylesheet: Path):
 if __name__ == '__main__':
     inFile, outFile, stylesheet, compress, exclude=parse_arguments()
     os.chdir(inFile)
-    tmpDir=TmpDir('./', exclude)
-    pathsToConvert=find_paths_to_convert('*.adoc')
+    tmpDir=TmpDir(Path('./'), exclude)
+    pathsToConvert:list[Path]=find_paths_to_convert('*.adoc')
 
     for i in pathsToConvert:
-        convert_file(inDir='./', outDir=tmpDir.path, inFile=i, stylesheet=stylesheet)
+        convert_file(inDir=Path('./'), outDir=tmpDir.path, inFile=i, stylesheet=stylesheet)
 
     if compress:
         tmpDir.compress_and_copy_self_to(outFile)
